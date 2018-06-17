@@ -18,17 +18,31 @@ h1 {
 <h1 align="center"> User Management </h1>
 
 <script>
-function addUser()
-{
-alert("hello")
-}
-</script>
 
+function isFilled() 
+ {
+ 	
+ 	var name = document.forms["addUser"]["username"].value;
+ 	var password = document.forms["addUser"]["password"].value;
+
+ 	if(name != "" && password != "")
+ 	{
+ 		
+ 		document.getElementById("submit").disabled = false; 
+ 	}
+ 	else{
+ 		document.getElementById("submit").disabled = true; 
+ 	}	               
+ }
+</script>
 </head>
 <body>
 
-<form>
-Username: <input type="text"> Password: <input type ="text"> <input type="button" name="adduserButton" value ="Add User" onclick ="addUser()"> <br>
+<form name ="addUser" method = "post"  action="users.php">
+<p>Create a new user</p><br>
+Username: <input type="text" name ="username" onchange="isFilled()"> 
+Password: <input type ="text" name="password" onchange="isFilled()"> 
+<input type="submit" name="adduserButton" value ="Add User" id="submit" disabled ="disabled"> <br>
 <br>
 
 </form>
@@ -38,7 +52,26 @@ Username: <input type="text"> Password: <input type ="text"> <input type="button
 
 <?php
 
+//print all the users in the database
 include "database.php"; 
+
+
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST')
+{
+
+$username = $_POST["username"];
+$password = $_POST["password"];
+
+$sql = "INSERT INTO users (username, password)
+VALUES ('".$username."', '".$password."')";
+
+if ($conn->query($sql) === TRUE) {
+
+   }
+
+header('Location: users.php');
+}
 
 echo "
 <style>
